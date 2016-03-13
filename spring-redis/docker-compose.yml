@@ -16,11 +16,13 @@ services:
       - wfij
 
   redisdata:
-    image: 'debian:jessie'
+    image: busybox
     volumes:
       - /home/keryhu/dbdata/redis_data:/data
       - /home/keryhu/dbdata/redis_logs:/var/log/redis
       - /home/keryhu/dbdata/redis_conf/redis.conf:/usr/local/etc/redis/redis.conf
+    networks:
+      - wfij
 
 
 
