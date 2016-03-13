@@ -1,0 +1,51 @@
+version: '2'
+services:
+
+  redis:
+    image: redis
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes_from:
+      -  redisdata
+    environment:
+      - REDIS_PASSWORD=29c4181fb842b5f24a3103dbd2ba17accb1f7e3c8f198689821f7955401ab921
+    command: redis-server /usr/local/etc/redis/redis.conf
+    networks:
+      - wfij
+
+  redisdata:
+    image: 'debian:jessie'
+    volumes:
+      - /home/keryhu/dbdata/redis_data:/data
+      - /home/keryhu/dbdata/redis_logs:/var/log/redis
+      - /home/keryhu/dbdata/redis_conf/redis.conf:/usr/local/etc/redis/redis.conf
+
+
+
+  useraccount:
+    image: redis-server:0.0.1-SNAPSHOT
+    container_name: redisserver
+    restart: always
+# 通过环境变量，让redisserver访问redis
+    environment:
+      REDIS_HOST: redis
+    ports:
+      - "8080:8080"
+    networks:
+      - wfij
+    depends_on:
+      - redis
+
+
+
+networks:
+  wfij:
+    external:
+      name: wfij-net
+
+
+
+
+
